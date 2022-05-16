@@ -1,6 +1,7 @@
-import { EditorConfig, MetaComponent } from '../types';
+import { EditorConfig, Component } from '../types';
 import EditorBlock from './editor-block';
-import useDrag from '@/hooks/useDrag.ts';
+import useMetaComponentDrag from '../hooks/useMetaComponentDrag';
+import useBlockDrag from '../hooks/useBlockDrag'
 
 export default defineComponent({
     props: {
@@ -9,30 +10,22 @@ export default defineComponent({
     setup(props) {
         const data = computed(() => props.modelValue);
         const config = inject<EditorConfig>('config');
-        let currentDragComponent: MetaComponent | null = null;
-        const currentSelectedComponent = ref<MetaComponent | null>(null);
-
-        const { dragstart, dragEnter, dragLeave, dragOver, drop } =
-            useDrag(data);
-        const onBlockClick = (event: MouseEvent, component: MetaComponent) => {
-            currentSelectedComponent.value = component;
-        };
-        let selectedStyle = reactive({});
-        watchEffect(() => {
-            console.log(
-                'watchEffect',
-                currentSelectedComponent,
-                currentSelectedComponent.value,
-            );
-            if (currentSelectedComponent && currentSelectedComponent.value) {
-                selectedStyle = {
-                    border: '2px dashed red',
-                };
-            } else {
-                selectedStyle = {};
+        const containerRef = ref<HTMLDivElement|null>(null)
+        const { dragstart, dragEnter, dragLeave, dragOver, drop } = useMetaComponentDrag(data);
+        const { onMousedown,onMousemove,onMouseup,clearFocusStatus } = useBlockDrag(data)
+        const onBlockClick = (event: MouseEvent, component: Component) => {
+            component.focusStatus = !component.focusStatus
+            if(!event.shiftKey) {
+                clearFocusStatus(component)
             }
-        });
-
+            event.stopPropagation()
+        };
+        onMounted(() => {
+            containerRef.value?.addEventListener('click',() => {
+                clearFocusStatus()
+            })
+        })
+       
         return () => (
             <div>
                 <div class="w-1/4 h-full bg-red-500 absolute left-0 top-0 bottom-0 p-4 box-border">
@@ -52,26 +45,27 @@ export default defineComponent({
                     ))}
                 </div>
                 <div class="absolute left-1/4 top-0 h-1/6 w-7/12 bg-pink-500">
-                    top
+                    top 111
                 </div>
                 <div class="absolute left-1/4 top-1/6 h-5/6 w-7/12 bg-blue-500">
                     <div
+                        ref= {containerRef}
                         onDragover={dragOver}
                         onDrop={drop}
                         class="h-full overflow-auto relative"
                     >
                         {data.value?.componentList.map(
-                            (component: MetaComponent) => (
+                            (component: Component) => (
                                 <EditorBlock
                                     style={
-                                        currentSelectedComponent.value?.id ===
-                                        component.id
-                                            ? selectedStyle
-                                            : null
+                                        component.focusStatus ? {border: '2px dashed red'}: null
                                     }
-                                    onClick={(event: MouseEvent) =>
+                                    onClick = {(event: MouseEvent) =>
                                         onBlockClick(event, component)
                                     }
+                                    onMousedown = {onMousedown}
+                                    onMousemove = {onMousemove}
+                                    onMouseup = {onMouseup}
                                     blockData={component}
                                 ></EditorBlock>
                             ),

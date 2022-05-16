@@ -1,10 +1,16 @@
-export interface MetaData {
+export interface TotalData {
     container: Record<string, any>;
-    metaComponentList: Array<MetaComponent>;
+    componentList: Array<Component>;
+}
+
+export interface Component extends Omit<MetaComponent,'preView' | 'render'> {
+    componentId: number;
+    left:number,
+    top: number,
+    focusStatus?: boolean
 }
 
 export interface MetaComponent {
-    id: number;
     key: string;
     label: string;
     preView: () => void;
