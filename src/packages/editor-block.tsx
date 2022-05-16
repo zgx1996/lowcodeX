@@ -8,12 +8,12 @@ export default defineComponent({
   },
   setup(props) {
     const styleData = computed(() => ({
-      left: `${props.blockData.left}px`,
-      top: `${props.blockData.top}px`,
+      left: `${props.blockData?.left}px`,
+      top: `${props.blockData?.top}px`,
     }))
     const config = inject<EditorConfig>('config')
     const component = config!.metaComponentMap[props.blockData?.key as string]
-    return () => <div style={styleData.value} class="absolute">
+    return () => <div style={styleData.value} class="absolute cursor-pointer">
       {component.render()}
     </div>
   }
