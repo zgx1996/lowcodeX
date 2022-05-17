@@ -1,7 +1,8 @@
 import { EditorConfig, Component } from '../types';
 import EditorBlock from './editor-block';
 import useMetaComponentDrag from '../hooks/useMetaComponentDrag';
-import useBlockDrag from '../hooks/useBlockDrag'
+import useBlockDrag from '../hooks/useBlockDrag';
+import MarkLine from './mark-line';
 
 export default defineComponent({
     props: {
@@ -10,22 +11,28 @@ export default defineComponent({
     setup(props) {
         const data = computed(() => props.modelValue);
         const config = inject<EditorConfig>('config');
-        const containerRef = ref<HTMLDivElement|null>(null)
-        const { dragstart, dragEnter, dragLeave, dragOver, drop } = useMetaComponentDrag(data);
-        const { onMousedown,onMousemove,onMouseup,clearFocusStatus } = useBlockDrag(data)
+        const containerRef = ref<HTMLDivElement | null>(null);
+        const state = reactive({
+            markLineRef: null,
+        });
+        const markLineRef = ref<HTMLDivElement | null>();
+        const { dragstart, dragEnter, dragLeave, dragOver, drop } =
+            useMetaComponentDrag(data);
+        const { onMousedown, onMousemove, onMouseup, clearFocusStatus } =
+            useBlockDrag(data, markLineRef);
         const onBlockClick = (event: MouseEvent, component: Component) => {
-            component.focusStatus = !component.focusStatus
-            if(!event.shiftKey) {
-                clearFocusStatus(component)
+            component.focusStatus = !component.focusStatus;
+            if (!event.shiftKey) {
+                clearFocusStatus(component);
             }
-            event.stopPropagation()
+            event.stopPropagation();
         };
         onMounted(() => {
-            containerRef.value?.addEventListener('click',() => {
-                clearFocusStatus()
-            })
-        })
-       
+            containerRef.value?.addEventListener('click', () => {
+                clearFocusStatus();
+            });
+        });
+
         return () => (
             <div>
                 <div class="w-1/4 h-full bg-red-500 absolute left-0 top-0 bottom-0 p-4 box-border">
@@ -49,7 +56,7 @@ export default defineComponent({
                 </div>
                 <div class="absolute left-1/4 top-1/6 h-5/6 w-7/12 bg-blue-500">
                     <div
-                        ref= {containerRef}
+                        ref={containerRef}
                         onDragover={dragOver}
                         onDrop={drop}
                         class="h-full overflow-auto relative"
@@ -58,18 +65,21 @@ export default defineComponent({
                             (component: Component) => (
                                 <EditorBlock
                                     style={
-                                        component.focusStatus ? {border: '2px dashed red'}: null
+                                        component.focusStatus
+                                            ? { border: '2px dashed red' }
+                                            : null
                                     }
-                                    onClick = {(event: MouseEvent) =>
+                                    onClick={(event: MouseEvent) =>
                                         onBlockClick(event, component)
                                     }
-                                    onMousedown = {onMousedown}
-                                    onMousemove = {onMousemove}
-                                    onMouseup = {onMouseup}
+                                    onMousedown={onMousedown}
+                                    onMousemove={onMousemove}
+                                    onMouseup={onMouseup}
                                     blockData={component}
                                 ></EditorBlock>
                             ),
                         )}
+                        <MarkLine ref={markLineRef}></MarkLine>
                     </div>
                 </div>
                 <div class="w-1/6 h-full bg-yellow-200 absolute right-0 top-0 bottom-0 p-4 box-border">

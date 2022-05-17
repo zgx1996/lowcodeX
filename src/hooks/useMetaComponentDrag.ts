@@ -1,5 +1,5 @@
 import { Ref } from 'vue';
-import { MetaComponent,TotalData,Component } from '../types';
+import { MetaComponent, TotalData, Component } from '../types';
 let componentId = 1;
 export default function useMetaComponentDrag(data: Ref<TotalData>) {
     let currentDragComponent: MetaComponent | null = null;
@@ -28,7 +28,9 @@ export default function useMetaComponentDrag(data: Ref<TotalData>) {
             label: currentDragComponent?.label!,
             left: event.offsetX,
             top: event.offsetY,
-        })
+            width: currentDragComponent?.width,
+            height: currentDragComponent?.height,
+        });
         currentDragComponent = null;
     };
     return { dragstart, dragEnter, dragLeave, dragOver, drop, data };
