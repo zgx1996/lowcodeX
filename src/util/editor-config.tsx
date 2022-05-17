@@ -18,6 +18,8 @@ export let editorConfig = createEditorConfig();
 editorConfig.register({
     key: 'text',
     label: '文本',
+    width: 68,
+    height: 25,
     preView: () => '预览文本',
     render: () => '渲染文本',
 });

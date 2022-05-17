@@ -13,9 +13,19 @@ export default function useBlockDrag(data: Ref<TotalData>, markLineRef) {
         startX: 0,
         startY: 0,
         startPos: [],
+        lines: {
+            x: [],
+            y: [],
+        },
     });
     function onMousedown(event: MouseEvent) {
-        console.log('onMousedown');
+        const {
+            top: aTop,
+            left: aLeft,
+            width: aWidth,
+            height: aHeight,
+        } = focusList.value[0]; // 拖动的元素A
+        debugger;
         moveStart = true;
         dragState.startX = event.clientX;
         dragState.startY = event.clientY;
@@ -23,16 +33,67 @@ export default function useBlockDrag(data: Ref<TotalData>, markLineRef) {
             top,
             left,
         }));
+        unFocusList.value.forEach((element) => {
+            const { top, left, width, height } = element; // 不动的元素B
+            // X 水平方向移动
+            dragState.lines.x.push({ showLeft: left, left: left }); // B左对A左
+            dragState.lines.x.push({
+                showLeft: left + width! / 2,
+                left: left + width! / 2,
+            }); // B中对A左
+            dragState.lines.x.push({
+                showLeft: left + width!,
+                left: left + width!,
+            }); // B右对A左
+
+            dragState.lines.x.push({
+                showLeft: left,
+                left: left - aWidth! / 2,
+            }); // B左对A中
+            dragState.lines.x.push({
+                showLeft: left + width! / 2,
+                left: left + width! / 2 - aWidth! / 2,
+            }); // B中对A中
+            dragState.lines.x.push({
+                showLeft: left + width!,
+                left: left + width! - aWidth! / 2,
+            }); // B右对A中
+
+            dragState.lines.x.push({ showLeft: left, left: left - aWidth! }); // B左对A右
+            dragState.lines.x.push({
+                showLeft: left + width! / 2,
+                left: left + width! / 2 - aWidth!,
+            }); // B中对A右
+            dragState.lines.x.push({
+                showLeft: left + width!,
+                left: left + width! - aWidth!,
+            }); // B右对A右
+
+            //TODO Y 垂直方向移动
+        });
     }
     function onMousemoveInDocument(e: MouseEvent) {
         const { clientX, clientY } = e;
+        const deviation = 10;
+        const block = focusList.value[0];
+        markLineRef.value.hideYMarkLine();
+        console.log(dragState.lines.x);
+        for (const x of dragState.lines.x) {
+            const durX = block.left - x.left;
+            console.log('durX', durX);
+            if (Math.abs(durX) < deviation) {
+                markLineRef.value.showYMarkLine({
+                    left: x.showLeft,
+                });
+                break;
+            }
+        }
         focusList.value.forEach((item, index) => {
             item.left =
                 dragState.startPos[index].left + (clientX - dragState.startX);
             item.top =
                 dragState.startPos[index].top + (clientY - dragState.startY);
         });
-        _showMarkLine();
     }
     function onMousemove(event: MouseEvent) {
         if (moveStart) {
@@ -59,37 +120,6 @@ export default function useBlockDrag(data: Ref<TotalData>, markLineRef) {
             });
         }
     }
-    function _showMarkLine() {
-        const deviation = 10;
-        focusList.value.forEach((focusItem) => {
-            const left = focusItem.left;
-            const right = focusItem.left + focusItem.width!;
-            const midX = focusItem.left + focusItem.width! / 2;
-            const top = focusItem.top;
-            const bottom = focusItem.top + focusItem.height!;
-            const midY = focusItem.top + focusItem.height! / 2;
-            unFocusList.value.forEach((unFocusItem) => {
-                if (Math.abs(unFocusItem.left - left) < deviation) {
-                    focusItem.left = unFocusItem.left;
-                    markLineRef.value?.showYMarkLine({ left: focusItem.left });
-                } else if (
-                    Math.abs(unFocusItem.left + unFocusItem.width! - left) <
-                    deviation
-                ) {
-                    focusItem.left = unFocusItem.left + unFocusItem.width!;
-                    markLineRef.value?.showYMarkLine({ left: focusItem.left });
-                } else if (
-                    Math.abs(unFocusItem.left + unFocusItem.width! / 2 - left) <
-                    deviation
-                ) {
-                    focusItem.left = unFocusItem.left + unFocusItem.width! / 2;
-                    markLineRef.value?.showYMarkLine({ left: focusItem.left });
-                } else {
-                    markLineRef.value?.hideXMarkLine();
-                    markLineRef.value?.hideYMarkLine();
-                }
-            });
-        });
-    }
+
     return { onMousedown, onMousemove, onMouseup, clearFocusStatus };
 }
