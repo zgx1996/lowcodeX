@@ -1,17 +1,16 @@
-import { ToolBarItem } from '../types';
+import useCommand from '../hooks/useCommand';
+import { Command } from '../types';
 
-const toolbar: Array<ToolBarItem> = [
-    { text: '撤消', icon: 'i-ic-baseline-arrow-back' },
-    { text: '重做', icon: 'i-ic-baseline-arrow-forward' },
-];
 export default defineComponent({
     setup(props, { emit }) {
-        const handleClick = (toolbarItem: ToolBarItem) => {
-            console.log('toolbarItem', toolbarItem);
+        const { commandList } = useCommand()
+        const handleClick = (command: Command) => {
+            console.log('command', command)
+            command.execute()
         };
         return () => (
             <div class="flex justify-center items-center">
-                {toolbar.map((item) => (
+                {commandList.map((item) => (
                     <div
                         class="flex flex-col justify-center items-center bg-white-100 cursor-pointer"
                         style="width: 60px;height:60px;margin-right: 10px"

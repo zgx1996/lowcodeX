@@ -1,12 +1,14 @@
 import { Ref } from 'vue';
-import { TotalData, Component } from '../types';
+import { useState } from '../store/state';
+import { Component } from '../types';
 
-export default function useBlockDrag(data: Ref<TotalData>, markLineRef) {
+export default function useBlockDrag(markLineRef) {
+    const state = useState()
     const focusList = computed(() =>
-        data.value.componentList.filter((item) => item.focusStatus),
+        state.getComponentList.filter((item) => item.focusStatus),
     );
     const unFocusList = computed(() =>
-        data.value.componentList.filter((item) => !item.focusStatus),
+        state.getComponentList.filter((item) => !item.focusStatus),
     );
     let moveStart = false;
     const dragState = reactive<any>({
@@ -149,11 +151,11 @@ export default function useBlockDrag(data: Ref<TotalData>, markLineRef) {
     }
     function clearFocusStatus(exculdeComponent: Component | null = null) {
         if (!exculdeComponent) {
-            data.value.componentList.forEach(
+            state.getComponentList.forEach(
                 (item) => (item.focusStatus = false),
             );
         } else {
-            data.value.componentList.forEach((item) => {
+            state.getComponentList.forEach((item) => {
                 if (item.componentId != exculdeComponent.componentId) {
                     item.focusStatus = false;
                 }

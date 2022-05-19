@@ -4,20 +4,21 @@ import useMetaComponentDrag from '../hooks/useMetaComponentDrag';
 import useBlockDrag from '../hooks/useBlockDrag';
 import MarkLine from './mark-line';
 import Toolbar from './toolbar';
+import { useState } from '../store/state';
 
 export default defineComponent({
     props: {
         modelValue: { type: Object },
     },
     setup(props) {
-        const data = computed(() => props.modelValue);
+        const state = $computed(() =>useState())
         const config = inject<EditorConfig>('config');
         const containerRef = ref<HTMLDivElement | null>(null);
         const markLineRef = ref<HTMLDivElement | null>();
         const { dragstart, dragEnter, dragLeave, dragOver, drop } =
-            useMetaComponentDrag(data);
+            useMetaComponentDrag();
         const { onMousedown, onMousemove, onMouseup, clearFocusStatus } =
-            useBlockDrag(data, markLineRef);
+            useBlockDrag(markLineRef);
         const onBlockClick = (event: MouseEvent, component: Component) => {
             component.focusStatus = !component.focusStatus;
             if (!event.shiftKey) {
@@ -59,7 +60,7 @@ export default defineComponent({
                         onDrop={drop}
                         class="h-full overflow-auto relative"
                     >
-                        {data.value?.componentList.map(
+                        {state.getComponentList.map(
                             (component: Component) => (
                                 <EditorBlock
                                     style={

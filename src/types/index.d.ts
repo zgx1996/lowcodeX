@@ -1,4 +1,4 @@
-export interface TotalData {
+export interface State {
     container: Record<string, any>;
     componentList: Array<Component>;
 }
@@ -31,13 +31,14 @@ export interface ToolBarItem {
 }
 
 export interface Command {
-    text: string;
     key: string;
+    text: string;
+    icon: string;
     hotKey: string;
     execute: () => void;
 }
 
 export interface Snapshot {
-    snapshotList: Array<TotalData>;
+    snapshotList: Array<State>;
     index: number;
 }

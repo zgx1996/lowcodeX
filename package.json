@@ -12,10 +12,12 @@
         "prettier": "prettier --write"
     },
     "dependencies": {
+        "@vue/devtools-api": "^6.0.0-beta.14",
         "@vueuse/core": "^8.4.2",
         "element-plus": "^2.2.0",
-        "vue": "^3.2.25",
-        "@vue/devtools-api": "^6.0.0-beta.14"
+        "lodash": "^4.17.21",
+        "pinia": "^2.0.14",
+        "vue": "^3.2.25"
     },
     "devDependencies": {
         "@iconify-json/ic": "^1.1.4",

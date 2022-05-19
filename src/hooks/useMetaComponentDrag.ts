@@ -1,10 +1,11 @@
 import { Ref } from 'vue';
-import { MetaComponent, TotalData, Component } from '../types';
+import { useState } from '../store/state';
+import { MetaComponent, Component } from '../types';
 import useSnapshot from './useSnapshot';
 let componentId = 1;
-export default function useMetaComponentDrag(data: Ref<TotalData>) {
+export default function useMetaComponentDrag() {
+    const state = useState()
     let currentDragComponent: MetaComponent | null = null;
-    const { addSnapshot } = useSnapshot(data.value);
     const dragstart = (component: MetaComponent, event: DragEvent): void => {
         currentDragComponent = component;
     };
@@ -22,7 +23,7 @@ export default function useMetaComponentDrag(data: Ref<TotalData>) {
     };
 
     const drop = (event: DragEvent): void => {
-        data.value?.componentList.push({
+        state.addComponentWithTransaction({
             componentId: componentId++,
             key: currentDragComponent?.key!,
             label: currentDragComponent?.label!,
@@ -30,9 +31,8 @@ export default function useMetaComponentDrag(data: Ref<TotalData>) {
             top: event.offsetY,
             width: currentDragComponent?.width,
             height: currentDragComponent?.height,
-        });
-        addSnapshot(data.value);
+        })
         currentDragComponent = null;
     };
-    return { dragstart, dragEnter, dragLeave, dragOver, drop, data };
+    return { dragstart, dragEnter, dragLeave, dragOver, drop };
 }

@@ -25,7 +25,9 @@ export default defineConfig({
     }
   },
   plugins: [
-    vue(), 
+    vue({
+      reactivityTransform: true
+    }), 
     vueJsx(),
     Components({
       // 指定组件位置，默认是src/components
