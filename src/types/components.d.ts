@@ -8,6 +8,7 @@ declare module '@vue/runtime-core' {
     Editor: typeof import('./../packages/editor.tsx')['default']
     EditorBlock: typeof import('./../packages/editor-block.tsx')['default']
     MarkLine: typeof import('./../packages/mark-line.tsx')['default']
+    Toolbar: typeof import('./../packages/toolbar.tsx')['default']
   }
 }
 

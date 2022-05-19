@@ -3,6 +3,7 @@ import EditorBlock from './editor-block';
 import useMetaComponentDrag from '../hooks/useMetaComponentDrag';
 import useBlockDrag from '../hooks/useBlockDrag';
 import MarkLine from './mark-line';
+import Toolbar from './toolbar';
 
 export default defineComponent({
     props: {
@@ -12,9 +13,6 @@ export default defineComponent({
         const data = computed(() => props.modelValue);
         const config = inject<EditorConfig>('config');
         const containerRef = ref<HTMLDivElement | null>(null);
-        const state = reactive({
-            markLineRef: null,
-        });
         const markLineRef = ref<HTMLDivElement | null>();
         const { dragstart, dragEnter, dragLeave, dragOver, drop } =
             useMetaComponentDrag(data);
@@ -52,7 +50,7 @@ export default defineComponent({
                     ))}
                 </div>
                 <div class="absolute left-1/4 top-0 h-1/6 w-7/12 bg-pink-500">
-                    top 111
+                    <Toolbar class="h-full"></Toolbar>
                 </div>
                 <div class="absolute left-1/4 top-1/6 h-5/6 w-7/12 bg-blue-500">
                     <div

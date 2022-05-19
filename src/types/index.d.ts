@@ -24,3 +24,20 @@ export interface EditorConfig {
     metaComponentMap: Record<string, MetaComponent>;
     register: (component: MetaComponent) => void;
 }
+
+export interface ToolBarItem {
+    text: string;
+    icon: string;
+}
+
+export interface Command {
+    text: string;
+    key: string;
+    hotKey: string;
+    execute: () => void;
+}
+
+export interface Snapshot {
+    snapshotList: Array<TotalData>;
+    index: number;
+}
