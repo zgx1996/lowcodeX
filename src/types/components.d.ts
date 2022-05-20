@@ -5,6 +5,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Contextmenu: typeof import('./../packages/contextmenu.tsx')['default']
     Editor: typeof import('./../packages/editor.tsx')['default']
     EditorBlock: typeof import('./../packages/editor-block.tsx')['default']
     MarkLine: typeof import('./../packages/mark-line.tsx')['default']

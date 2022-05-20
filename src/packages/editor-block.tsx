@@ -8,8 +8,8 @@ export default defineComponent({
     },
     setup(props) {
         const styleData = computed(() => ({
-            left: `${props.blockData?.left}px`,
-            top: `${props.blockData?.top}px`,
+            left: `${props.blockData.style.left}px`,
+            top: `${props.blockData.style.top}px`,
         }));
         console.log('props.blockData', props.blockData);
         const config = inject<EditorConfig>('config');
@@ -18,8 +18,8 @@ export default defineComponent({
         return () => (
             <div style={styleData.value} class="absolute cursor-pointer">
                 {component.render({
-                    width: props.blockData?.width + 'px',
-                    height: props.blockData?.height + 'px',
+                    width: props.blockData.style.width + 'px',
+                    height: props.blockData.style.height + 'px',
                 })}
             </div>
         );

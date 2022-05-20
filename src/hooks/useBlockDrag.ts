@@ -26,19 +26,19 @@ export default function useBlockDrag(markLineRef) {
             left: aLeft,
             width: aWidth,
             height: aHeight,
-        } = focusList.value[0]; // 拖动的元素A
+        } = focusList.value[0]?.style; // 拖动的元素A
         debugger;
         moveStart = true;
         dragState.startX = event.clientX;
         dragState.startY = event.clientY;
-        dragState.startLeft = focusList.value[0].left;
-        dragState.startTop = focusList.value[0].top;
-        dragState.startPos = focusList.value.map(({ top, left }) => ({
+        dragState.startLeft = focusList.value[0].style.left;
+        dragState.startTop = focusList.value[0].style.top;
+        dragState.startPos = focusList.value.map(({ style: {top, left} }) => ({
             top,
             left,
         }));
         unFocusList.value.forEach((element) => {
-            const { top, left, width, height } = element; // 不动的元素B
+            const { top, left, width, height } = element.style; // 不动的元素B
             // X 水平方向移动
             dragState.lines.x.push({ showLeft: left, left: left }); // B左对A左
             dragState.lines.x.push({
@@ -131,9 +131,9 @@ export default function useBlockDrag(markLineRef) {
             }
         }
         focusList.value.forEach((item, index) => {
-            item.left =
+            item.style.left =
                 dragState.startPos[index].left + (clientX - dragState.startX);
-            item.top =
+            item.style.top =
                 dragState.startPos[index].top + (clientY - dragState.startY);
         });
     }

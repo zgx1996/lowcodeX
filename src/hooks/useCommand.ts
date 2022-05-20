@@ -9,13 +9,29 @@ export default function useCommand() {
     }
     const state = useState()
     const snapshot = useSnapshot()
+    const keyboardEvent = (() => {
+        const onKeyDown = (e:KeyboardEvent) => {
+            const { ctrlKey, key } = e
+            if(ctrlKey) {
+                const command = commandList.find(c => c.hotKey === ('ctrl+' + key))
+                command && command.execute()
+            }
+        }
+        window.addEventListener('keydown',onKeyDown)
+        return () => {
+            window.removeEventListener('keydown', onKeyDown)
+        }
+    })()
+    onUnmounted(() => {
+        keyboardEvent()
+    })
     register({
         key: 'back',
         text: '撤消',
         icon: 'i-ic-baseline-arrow-back',
         hotKey: 'ctrl+z',
         execute: () => {
-            useState().setState(snapshot.back())
+            state.setState(snapshot.back())
         }
     })
     register({
@@ -24,7 +40,7 @@ export default function useCommand() {
         icon: 'i-ic-baseline-arrow-forward',
         hotKey: 'ctrl+y',
         execute: () => {
-            useState().setState(snapshot.forward())
+            state.setState(snapshot.forward())
         }
     })
     return { commandList,register }
