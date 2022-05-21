@@ -1,3 +1,4 @@
+import { fa } from 'element-plus/lib/locale';
 import { cloneDeep } from 'lodash';
 import { defineStore } from 'pinia';
 import { Component, State } from '../types';
@@ -28,34 +29,39 @@ export const useState = defineStore('state', {
       this.container = cloneDeep(state.container);
       this.componentList = cloneDeep(state.componentList);
     },
-    addComponent(component: Component) {
+    addComponent(component: Component,transactional:boolean = false) {
       this.componentList.push(component);
+      transactional && useSnapshot().snapshot();
     },
-    addComponentWithTransaction(component: Component) {
-      this.addComponent(component);
-      useSnapshot().snapshot();
-    },
-    updateComponent(component: Component) {
+    updateComponent(component: Component,transactional:boolean = false) {
       const index = this.getComponentList.findIndex(
         (comp) => comp.componentId === component.id,
       );
       if (index > -1) {
         this.componentList.splice(index, 1, component);
+        transactional && useSnapshot().snapshot();
       }
     },
-    updateComponentWithTransaction(component: Component) {
-      this.updateComponent(component);
-      useSnapshot().snapshot();
-    },
-    updateComponentAttr<T>(
+    updateComponentAttr(
       component: Component,
       attr: Record<'key' | 'value', any>,
+      transactional:boolean = false
     ) {
       const index = this.componentList.findIndex(
         (comp) => comp.componentId === component.componentId,
       );
       if (index > -1) {
         this.componentList[index][attr.key] = attr.value;
+        transactional && useSnapshot().snapshot();
+      }
+    },
+    updateComponentStyle(component: Component, styleAttr: Record<'key' | 'value', any>, transactional:boolean = false) {
+      const index = this.componentList.findIndex(
+        (comp) => comp.componentId === component.componentId,
+      );
+      if (index > -1) {
+        this.componentList[index].style[styleAttr.key] = styleAttr.value;
+        transactional && useSnapshot().snapshot();
       }
     },
   },

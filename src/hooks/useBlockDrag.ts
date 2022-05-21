@@ -1,4 +1,5 @@
 import { Ref } from 'vue';
+import { useSnapshot } from '../store/snapshot';
 import { useState } from '../store/state';
 import { Component } from '../types';
 
@@ -10,7 +11,7 @@ export default function useBlockDrag(markLineRef) {
     const unFocusList = computed(() =>
         state.getComponentList.filter((item) => !item.focusStatus),
     );
-    let moveStart = false;
+    let moveStart = "";
     const dragState = reactive<any>({
         startX: 0,
         startY: 0,
@@ -21,14 +22,14 @@ export default function useBlockDrag(markLineRef) {
         },
     });
     function onMousedown(event: MouseEvent) {
+        console.log('onMousedown');
+        moveStart = 'onMousedown'
         const {
             top: aTop,
             left: aLeft,
             width: aWidth,
             height: aHeight,
         } = focusList.value[0]?.style; // 拖动的元素A
-        debugger;
-        moveStart = true;
         dragState.startX = event.clientX;
         dragState.startY = event.clientY;
         dragState.startLeft = focusList.value[0].style.left;
@@ -110,8 +111,8 @@ export default function useBlockDrag(markLineRef) {
         const deviation = 5;
         const left = clientX - dragState.startX + dragState.startLeft;
         const top = clientY - dragState.startY + dragState.startTop;
-        markLineRef.value.hideXMarkLine();
-        markLineRef.value.hideYMarkLine();
+        markLineRef.value?.hideXMarkLine();
+        markLineRef.value?.hideYMarkLine();
         for (const x of dragState.lines.x) {
             if (Math.abs(left - x.left) < deviation) {
                 markLineRef.value.showYMarkLine({
@@ -138,15 +139,21 @@ export default function useBlockDrag(markLineRef) {
         });
     }
     function onMousemove(event: MouseEvent) {
-        if (moveStart) {
+        console.log('onMousemove');
+        if (moveStart === 'onMousedown' && focusList.value.length > 0) {
+            moveStart = 'onMousemove'
             document.addEventListener('mousemove', onMousemoveInDocument);
         }
     }
     function onMouseup(event: MouseEvent) {
         console.log('onMouseup');
-        moveStart = false;
         markLineRef.value?.hideXMarkLine();
         markLineRef.value?.hideYMarkLine();
+        console.log('moveStart', moveStart)
+        if(moveStart === 'onMousemove' && focusList.value.length > 0) {
+            useSnapshot().snapshot()
+        }
+        moveStart = "";
         document.removeEventListener('mousemove', onMousemoveInDocument);
     }
     function clearFocusStatus(exculdeComponent: Component | null = null) {

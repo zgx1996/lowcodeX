@@ -28,7 +28,8 @@ export default {
         const div = document.createElement('div');
         div.style.padding = '6px 16px';
         div.innerText = menu.text;
-        li.addEventListener('click', () => {
+        li.addEventListener('click', (e) => {
+          e.stopPropagation()
           menu.fn();
           contextmenuDiv &&
             el.contains(contextmenuDiv) &&

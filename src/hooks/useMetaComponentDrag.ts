@@ -22,7 +22,7 @@ export default function useMetaComponentDrag() {
   };
 
   const drop = (event: DragEvent): void => {
-    state.addComponentWithTransaction({
+    state.addComponent({
       componentId: componentId++,
       key: currentDragComponent?.key!,
       label: currentDragComponent?.label!,
@@ -31,7 +31,7 @@ export default function useMetaComponentDrag() {
         left: event.offsetX,
         top: event.offsetY,
       },
-    });
+    }, true);
     currentDragComponent = null;
   };
   return { dragstart, dragEnter, dragLeave, dragOver, drop };
