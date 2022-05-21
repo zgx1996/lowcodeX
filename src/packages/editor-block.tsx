@@ -15,8 +15,12 @@ export default defineComponent({
         const config = inject<EditorConfig>('config');
         const component =
             config!.metaComponentMap[props.blockData?.key as string];
+            const contextmenuList = [{
+                text: '复制',
+                fn: () => console.log('点击了复制按钮')
+            }]
         return () => (
-            <div style={styleData.value} class="absolute cursor-pointer">
+            <div style={styleData.value} class="absolute cursor-pointer" v-contextmenu:key={contextmenuList}>
                 {component.render({
                     width: props.blockData.style.width + 'px',
                     height: props.blockData.style.height + 'px',

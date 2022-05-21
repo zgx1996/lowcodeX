@@ -71,7 +71,6 @@ export default defineComponent({
                                     onClick={(event: MouseEvent) =>
                                         onBlockClick(event, component)
                                     }
-                                    v-contextmenu={component}
                                     onMousedown={onMousedown}
                                     onMousemove={onMousemove}
                                     onMouseup={onMouseup}

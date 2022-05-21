@@ -10,11 +10,20 @@ export default {
       contextmenuDiv.style.left = '20px'
       contextmenuDiv.style.top = '20px'
       contextmenuDiv.style.zIndex= '999'
-      contextmenuDiv.style.backgroundColor="#000"
+      contextmenuDiv.style.backgroundColor="#fff"
       const ul = document.createElement('ul')
-      const li = document.createElement('li')
-      li.innerText="按钮1"
-      ul.appendChild(li)
+      binding.value.forEach(menu => {
+        const li = document.createElement('li')
+        li.style.listStyle="none"
+        li.style.margin="0"
+        li.style.padding="0"
+        li.innerHTML = menu.text
+        li.addEventListener('click',() => {
+          menu.fn()
+          el.removeChild(contextmenuDiv!)
+        })
+        ul.appendChild(li)
+      })
       contextmenuDiv.appendChild(ul)
       el.appendChild(contextmenuDiv)
       window.addEventListener('click',() => {
