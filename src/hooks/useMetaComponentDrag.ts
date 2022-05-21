@@ -1,7 +1,6 @@
 import { Ref } from 'vue';
 import { useState } from '../store/state';
 import { MetaComponent, Component } from '../types';
-import useSnapshot from './useSnapshot';
 let componentId = 1;
 export default function useMetaComponentDrag() {
     const state = useState();
@@ -27,10 +26,12 @@ export default function useMetaComponentDrag() {
             componentId: componentId++,
             key: currentDragComponent?.key!,
             label: currentDragComponent?.label!,
-            left: event.offsetX,
-            top: event.offsetY,
-            width: currentDragComponent?.width,
-            height: currentDragComponent?.height,
+            style: {
+                left: event.offsetX,
+                top: event.offsetY,
+                width: currentDragComponent?.style.width,
+                height: currentDragComponent?.style.height,
+            }
         });
         currentDragComponent = null;
     };
