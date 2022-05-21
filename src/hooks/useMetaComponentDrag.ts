@@ -4,7 +4,7 @@ import { MetaComponent, Component } from '../types';
 import useSnapshot from './useSnapshot';
 let componentId = 1;
 export default function useMetaComponentDrag() {
-    const state = useState()
+    const state = useState();
     let currentDragComponent: MetaComponent | null = null;
     const dragstart = (component: MetaComponent, event: DragEvent): void => {
         currentDragComponent = component;
@@ -31,7 +31,7 @@ export default function useMetaComponentDrag() {
             top: event.offsetY,
             width: currentDragComponent?.width,
             height: currentDragComponent?.height,
-        })
+        });
         currentDragComponent = null;
     };
     return { dragstart, dragEnter, dragLeave, dragOver, drop };
