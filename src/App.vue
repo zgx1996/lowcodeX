@@ -1,7 +1,7 @@
 <template>
-    <div class="">
-        <Editor></Editor>
-    </div>
+  <div class="">
+    <Editor></Editor>
+  </div>
 </template>
 
 <script lang="ts" setup>
