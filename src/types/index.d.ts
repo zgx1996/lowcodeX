@@ -19,6 +19,7 @@ export interface MetaComponent {
   key: string;
   label: string;
   style: Style;
+  props: Object,
   preView: () => void;
   render: (style?: Partial<CSSStyleDeclaration>) => void;
 }

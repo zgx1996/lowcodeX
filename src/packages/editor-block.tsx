@@ -85,7 +85,7 @@ export default defineComponent({
         {metaComponent.render({
           width: props.blockData.style.width + 'px',
           height: props.blockData.style.height + 'px',
-        })}
+        },props.blockData.props)}
         {isFocusStatus.value ? 
           scaleSizeBlockList.map(block => <div style={scaleBlockStyle(block)} class= {'scale-block ' + block.dir}></div>)
           :<div></div>

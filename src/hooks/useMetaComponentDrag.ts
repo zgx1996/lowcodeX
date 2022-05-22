@@ -31,6 +31,7 @@ export default function useMetaComponentDrag() {
         left: event.offsetX,
         top: event.offsetY,
       },
+      props: {}
     }, true);
     currentDragComponent = null;
   };

@@ -5,6 +5,7 @@ import useBlockDrag from '../hooks/useBlockDrag';
 import MarkLine from './mark-line';
 import Toolbar from './toolbar';
 import { useState } from '../store/state';
+import ComponentConfig from './component-config';
 
 export default defineComponent({
     props: {
@@ -15,6 +16,13 @@ export default defineComponent({
         const config = inject<EditorConfig>('config');
         const containerRef = ref<HTMLDivElement | null>(null);
         const markLineRef = ref<HTMLDivElement | null>();
+        const lastFocusComponent = $computed(() => {
+            const list = useState().getComponentList.filter(item => item.focusStatus)
+            if(list && list.length > 0) {
+                return list[list.length-1]
+            }
+            return null
+        })
         const { dragstart, dragEnter, dragLeave, dragOver, drop } =
             useMetaComponentDrag();
         const { onMousedown, onMousemove, onMouseup, clearFocusStatus } =
@@ -82,7 +90,7 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="w-1/6 h-full bg-yellow-200 absolute right-0 top-0 bottom-0 p-4 box-border">
-                    right
+                    <ComponentConfig blockData={lastFocusComponent} state={state}></ComponentConfig>
                 </div>
             </div>
         );
