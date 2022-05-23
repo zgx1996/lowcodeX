@@ -5,7 +5,6 @@ export default defineComponent({
     setup(props, { emit }) {
         const { commandList } = useCommand()
         const handleClick = (command: Command) => {
-            console.log('command', command)
             command.execute()
         };
         return () => (

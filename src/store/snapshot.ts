@@ -44,9 +44,6 @@ export const useSnapshot = defineStore('snapshot', {
             if (this.index < this.snapshotList.length - 1) {
                 this.index++;
             }
-            this.snapshotList[this.index].componentList.forEach((item) =>
-                console.log(item.key),
-            );
             return this.snapshotList[this.index];
         },
     },

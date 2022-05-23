@@ -18,7 +18,6 @@ export default defineComponent({
     const isFocusStatus = computed(() => {
       return state.getComponentList.filter(item => item.focusStatus).map(item => item.componentId).includes(props.blockData.componentId)
     })
-    console.log('props.blockData', props.blockData);
     const config = inject<EditorConfig>('config');
     const metaComponent = config!.metaComponentMap[props.blockData?.key as string];
     const contextmenuList = [

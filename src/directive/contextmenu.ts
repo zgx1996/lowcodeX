@@ -6,8 +6,6 @@ export default {
       contextmenuDiv &&
         el.contains(contextmenuDiv) &&
         el.removeChild(contextmenuDiv);
-      console.log(el);
-      console.log(e.offsetX, e.offsetY);
       contextmenuDiv = document.createElement('div');
       contextmenuDiv.className = 'contextmenu';
       contextmenuDiv.style.position = 'fixed';

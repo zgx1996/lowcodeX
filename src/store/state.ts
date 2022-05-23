@@ -34,13 +34,10 @@ export const useState = defineStore('state', {
       transactional && useSnapshot().snapshot();
     },
     updateComponent(component: Component,transactional:boolean = false) {
-      console.log('updateComponent', component)
       const index = this.getComponentList.findIndex(
         (comp) => comp.componentId === component.componentId,
       );
-      console.log('index', index)
       if (index > -1) {
-        console.log('this.componentList', this.componentList)
         this.componentList.splice(index, 1, component);
         transactional && useSnapshot().snapshot();
       }

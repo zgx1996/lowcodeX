@@ -22,7 +22,6 @@ export default function useBlockDrag(markLineRef) {
         },
     });
     function onMousedown(event: MouseEvent) {
-        console.log('onMousedown');
         moveStart = 'onMousedown'
         const {
             top: aTop,
@@ -139,17 +138,14 @@ export default function useBlockDrag(markLineRef) {
         });
     }
     function onMousemove(event: MouseEvent) {
-        console.log('onMousemove');
         if (moveStart === 'onMousedown' && focusList.value.length > 0) {
             moveStart = 'onMousemove'
             document.addEventListener('mousemove', onMousemoveInDocument);
         }
     }
     function onMouseup(event: MouseEvent) {
-        console.log('onMouseup');
         markLineRef.value?.hideXMarkLine();
         markLineRef.value?.hideYMarkLine();
-        console.log('moveStart', moveStart)
         if(moveStart === 'onMousemove' && focusList.value.length > 0) {
             useSnapshot().snapshot()
         }

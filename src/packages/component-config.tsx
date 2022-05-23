@@ -34,9 +34,8 @@ export default defineComponent({
       watch(() => props.blockData,reset,{ immediate: true } )
       if(props.blockData) {
         const component = config.metaComponentMap[props.blockData.key]
-        console.log('component',component,Object.entries(component.props||{}))
+        
         Object.entries(component.props||{}).map(([propName,value]) => {
-          console.log(propName, value)
           if(value.type === 'color') {
             content.push(<ElFormItem label={value.label}>
               <ElColorPicker v-model={state.editData.props[propName]}></ElColorPicker>
@@ -46,11 +45,13 @@ export default defineComponent({
               <ElInput v-model={state.editData.props[propName]}></ElInput>
             </ElFormItem>)
           }else if(value.type === 'select') {
-            content.push(<ElSelect label={value.label} v-model={state.editData.props[propName]}>
+            content.push(<ElFormItem label={value.label}>
+              <ElSelect v-model={state.editData.props[propName]}>
               { value.options.map(opt => {
                 return <ElOption label={opt.label} value={opt.value}></ElOption>
               }) }
-            </ElSelect>)
+            </ElSelect>
+            </ElFormItem>)
           }
         })
       } else {

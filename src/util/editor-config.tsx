@@ -38,22 +38,22 @@ editorConfig.register({
   key: 'button',
   label: '按钮',
   style: {
-    width: 200,
-    height: 40,
     zIndex: 1,
+    width: 200,
+    height:40,
   },
   props:{
     text:createTextProp('文本'),
     size: createSelectProp('大小', [
       {label: '默认',value:"default"},
       {label: '小',value:"small"},
+      {label: '中等',value:"medium"},
       {label: '大',value:"large"}
     ])
   },
   preView: () => <el-button>预览按钮</el-button>,
   render: (style,props) => {
-    console.log('render', props)
-    return <el-button style={style}>{props.text||'渲染按钮'}</el-button>
+    return <el-button style={style} size={props.size ||  'default'}>{props.text||'渲染按钮'}</el-button>
   },
 });
 
